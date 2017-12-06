@@ -4,9 +4,9 @@
 .func main
 
 main:
-        bl write_function
-        bl print_data_function
-        bl search_procedure
+        bl write_func
+        bl prnt_func
+        bl search
         b _exit
 
 _scanf:
@@ -19,7 +19,7 @@ _scanf:
         add sp, sp, #4
         pop {pc}
 
-write_function:
+write_func:
         push {lr}
         mov r5, #0
 
@@ -45,7 +45,7 @@ write_done:
         bl nwln
         pop {pc}
 
-print_data_function:
+prnt_func:
         mov r4, lr
         mov r0, #0
 
@@ -65,7 +65,7 @@ read_loop:
 
         cmp r11, #0
         moveq r5, r2
-        bl conditional_printer
+        bl cond_prnt
 
         pop {r2}
         pop {r1}
@@ -77,7 +77,7 @@ read_done:
         mov r0, #0
         mov pc, r4
 
-conditional_printer:
+cond_prnt:
         push {lr}
         cmp r5, r2
         popne {pc}
@@ -85,7 +85,7 @@ conditional_printer:
         bl printf
         pop {pc}
 
-search_procedure:
+search:
         push {lr}
         bl nwln
         mov r7, #4
@@ -97,16 +97,16 @@ search_procedure:
         mov r5, r0
         mov r10, #0
         mov r11, #1
-        bl print_data_function
+        bl prnt_func
         cmp r10, #0
-        beq No_Tango_En_El_Array
+        beq notin_arr
         pop {pc}
 
-No_Tango_En_El_Array:
+notin_arr:
         mov r7, #4
         mov r0, #1
         mov r2, #40
-        ldr r1, =no_tango
+        ldr r1, =no_arr
         swi 0
         pop {pc}
 
@@ -132,4 +132,4 @@ newline:        .ascii "\n"
 input_prompt:   .asciz "<VALUE_%d> "
 print_element:  .asciz  "array_a[%d] = %d\n"
 search_prompt:  .ascii "ENTER A SEARCH VALUE: "
-no_tango:       .ascii "That value does not exist in the array!\n"
+no_arr:       .ascii "That value does not exist in the array!\n"
